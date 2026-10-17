@@ -1,0 +1,11 @@
+Calendar integration demo | scenario=portfolio | mode=dry-run
+Plan: create=1, review=3, skip=1, update=1
+Outcomes: planned=6
+Provider operations: 0
+- demo-new-001: create -> planned | No destination record has this stable source_id.
+- demo-changed-002: update -> planned [description, start_utc, end_utc] | Managed fields differ from destination state.
+- demo-unchanged-003: skip -> planned | Destination managed fields already match.
+- demo-ambiguous-004: review -> planned | Multiple destination records share this stable source_id; no write is safe.
+- demo-invalid-005: review -> planned | Invalid source event: starts_at must be an ISO 8601 timestamp
+- demo-canceled-006: review -> planned | Canceled events require human review in this demo; missing data never causes automatic deletion.
+Dry run complete: no local state or report files were written.

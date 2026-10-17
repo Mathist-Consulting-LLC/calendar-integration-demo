@@ -1,0 +1,11 @@
+[
+  {
+    "source_id": "demo-uncertain-201",
+    "title": "Fictional Uncertain Write Exercise",
+    "description": "The simulated provider accepts this create, then loses the response.",
+    "starts_at": "2026-12-05T10:00:00-07:00",
+    "ends_at": "2026-12-05T11:00:00-07:00",
+    "timezone": "America/Denver",
+    "status": "scheduled"
+  }
+]

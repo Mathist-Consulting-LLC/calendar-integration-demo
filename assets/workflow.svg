@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-labelledby="title desc">
+  <title id="title">Calendar reconciliation demo workflow</title>
+  <desc id="desc">Fictional source events are validated, matched by stable source ID, planned, explicitly approved, and applied only to local simulated state.</desc>
+  <rect width="1200" height="360" fill="#f7f4ed"/>
+  <style>
+    .box { fill:#fff; stroke:#25324a; stroke-width:3; rx:16; }
+    .safe { fill:#e7f5ec; stroke:#247447; stroke-width:3; rx:16; }
+    .review { fill:#fff0d6; stroke:#a35b00; stroke-width:3; rx:16; }
+    .heading { font:700 25px system-ui,sans-serif; fill:#172033; }
+    .card-title { font:700 20px system-ui,sans-serif; fill:#172033; }
+    .text { font:16px system-ui,sans-serif; fill:#25324a; }
+    .small { font:14px system-ui,sans-serif; fill:#44506a; }
+    .arrow { stroke:#59657d; stroke-width:4; fill:none; marker-end:url(#arrow); }
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#59657d"/></marker></defs>
+  <text x="40" y="55" class="heading">Dry-run-first calendar reconciliation</text>
+  <rect x="40" y="105" width="240" height="140" class="box"/>
+  <text x="65" y="145" class="card-title">Fictional source</text>
+  <text x="65" y="180" class="text">Events + stable IDs</text>
+  <text x="65" y="211" class="small">JSON fixtures</text>
+  <text x="65" y="231" class="small">No credentials</text>
+  <path d="M280 175 H310" class="arrow"/>
+  <rect x="310" y="105" width="240" height="140" class="box"/>
+  <text x="335" y="145" class="card-title">Validate + map</text>
+  <text x="335" y="180" class="text">Fields, offsets, timezone</text>
+  <text x="335" y="211" class="small">Invalid data</text>
+  <text x="335" y="231" class="small">stops for review</text>
+  <path d="M550 175 H580" class="arrow"/>
+  <rect x="580" y="105" width="240" height="140" class="safe"/>
+  <text x="605" y="145" class="card-title">Reconciliation plan</text>
+  <text x="605" y="180" class="text">Create · update · skip</text>
+  <text x="605" y="211" class="small">Ambiguity</text>
+  <text x="605" y="231" class="small">stops for review</text>
+  <path d="M820 175 H850" class="arrow"/>
+  <rect x="850" y="105" width="310" height="140" class="review"/>
+  <text x="875" y="145" class="card-title">Explicit local apply</text>
+  <text x="875" y="180" class="text">Approved writes only</text>
+  <text x="875" y="211" class="small">Uncertain outcome stops</text>
+  <text x="875" y="231" class="small">No blind retry</text>
+  <text x="40" y="315" class="text">Second run: stable IDs + normalized readback → unchanged events produce zero writes.</text>
+  <text x="40" y="350" class="small">All destination behavior is simulated; no live provider compatibility is claimed.</text>
+</svg>

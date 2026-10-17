@@ -1,0 +1,9 @@
+{
+  "behavior": {
+    "uncertain": {
+      "create:demo-uncertain-201": "apply_then_lose_response"
+    }
+  },
+  "destination_events": [],
+  "uncertain_operations": {}
+}
