@@ -7,6 +7,8 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 MANAGED_FIELDS = ("title", "description", "start_utc", "end_utc", "timezone")
+DENVER_FALLBACK_MIN_YEAR = 2007
+DENVER_FALLBACK_MAX_YEAR = 2037
 
 
 @dataclass(frozen=True)
@@ -43,8 +45,18 @@ class ValidationError(ValueError):
     pass
 
 
+def canonical_source_id(value: Any) -> str | None:
+    """Return the one source identity representation used throughout the demo."""
+    if not isinstance(value, str):
+        return None
+    normalized = value.strip()
+    return normalized or None
+
+
 def map_source_event(raw: dict[str, Any]) -> MappedEvent:
-    source_id = _required_text(raw, "source_id")
+    source_id = canonical_source_id(raw.get("source_id"))
+    if source_id is None:
+        raise ValidationError("source_id is required")
     title = _required_text(raw, "title")
     description = _required_text(raw, "description")
     timezone_name = _required_text(raw, "timezone")
@@ -98,9 +110,21 @@ def _require_matching_offset(value: datetime, timezone_name: str, key: str) -> N
 def _valid_offsets(value: datetime, timezone_name: str, key: str) -> set[timedelta]:
     try:
         event_zone = ZoneInfo(timezone_name)
-    except ZoneInfoNotFoundError:
+    except (ZoneInfoNotFoundError, ValueError):
         return _fallback_offsets(value, timezone_name, key)
-    return {value.astimezone(event_zone).utcoffset()}
+
+    local = value.replace(tzinfo=None)
+    offsets: set[timedelta] = set()
+    for fold in (0, 1):
+        candidate = local.replace(tzinfo=event_zone, fold=fold)
+        round_trip = candidate.astimezone(timezone.utc).astimezone(event_zone)
+        if round_trip.replace(tzinfo=None) == local:
+            offset = candidate.utcoffset()
+            if offset is not None:
+                offsets.add(offset)
+    if not offsets:
+        raise ValidationError(f"{key} falls in a nonexistent local hour during the DST transition")
+    return offsets
 
 
 def _fallback_offsets(value: datetime, timezone_name: str, key: str) -> set[timedelta]:
@@ -112,6 +136,12 @@ def _fallback_offsets(value: datetime, timezone_name: str, key: str) -> set[time
             "this portable demo supports America/Denver and UTC"
         )
     local = value.replace(tzinfo=None)
+    if not DENVER_FALLBACK_MIN_YEAR <= local.year <= DENVER_FALLBACK_MAX_YEAR:
+        raise ValidationError(
+            "America/Denver fallback supports years "
+            f"{DENVER_FALLBACK_MIN_YEAR}-{DENVER_FALLBACK_MAX_YEAR}; "
+            "install system IANA timezone data for historical dates"
+        )
     march_first = datetime(local.year, 3, 1)
     november_first = datetime(local.year, 11, 1)
     dst_start_day = 8 + ((6 - march_first.weekday()) % 7)
@@ -128,4 +158,4 @@ def _fallback_offsets(value: datetime, timezone_name: str, key: str) -> set[time
 
 
 def _utc_string(value: datetime) -> str:
-    return value.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title description">
+  <title id="title">Repeat-run terminal demonstration</title>
+  <desc id="description">Fictional local output shows two provider operations on the first apply and zero on the second.</desc>
+  <rect width="1200" height="560" rx="18" fill="#101820"/>
+  <circle cx="34" cy="32" r="8" fill="#ff6b6b"/>
+  <circle cx="60" cy="32" r="8" fill="#ffd166"/>
+  <circle cx="86" cy="32" r="8" fill="#5dd39e"/>
+  <text x="112" y="39" fill="#b9c6d3" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="19">calendar-integration-demo — local simulated provider</text>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="20">
+    <text x="32" y="92" fill="#8be9fd">$ python -m calendar_demo reset</text>
+    <text x="32" y="126" fill="#d6e2eb">Reset complete. Removed: nothing</text>
+    <text x="32" y="178" fill="#8be9fd">$ python -m calendar_demo run --apply --approve create --approve update</text>
+    <text x="32" y="218" fill="#f1fa8c">Calendar integration demo | scenario=portfolio | mode=apply</text>
+    <text x="32" y="252" fill="#d6e2eb">Plan: create=1, review=3, skip=1, update=1</text>
+    <text x="32" y="286" fill="#5dd39e">Provider operations: 2</text>
+    <text x="32" y="320" fill="#b9c6d3">Apply complete: only generated scenario state/report JSON files were written.</text>
+    <text x="32" y="378" fill="#8be9fd">$ python -m calendar_demo run --apply --approve create --approve update</text>
+    <text x="32" y="418" fill="#f1fa8c">Calendar integration demo | scenario=portfolio | mode=apply</text>
+    <text x="32" y="452" fill="#d6e2eb">Plan: review=3, skip=3</text>
+    <text x="32" y="486" fill="#5dd39e">Provider operations: 0</text>
+    <text x="32" y="530" fill="#7f8c99">No network calls · no credentials · fictional data only</text>
+  </g>
+</svg>

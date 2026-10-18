@@ -8,7 +8,7 @@ A small, credential-free backend portfolio demonstration by **Mathist Consulting
 
 Calendar integrations have to decide what changed without creating duplicates or overwriting good provider data. A useful implementation needs stable identity, explicit field ownership, readable plans, safe failure handling, and proof that a second run does not repeat successful work.
 
-This self-initiated demo is derived from engineering patterns in my own calendar automation project. The code and fixtures here were newly written as a standalone public-review candidate.
+This self-initiated demo is derived from engineering patterns in an internal calendar automation project. The code and fixtures here were newly written as a standalone public portfolio demo.
 
 ## What the demo does
 
@@ -51,6 +51,10 @@ Run it again. The previously created and updated records should now be `skip`, w
 python -m calendar_demo run --apply --approve create --approve update
 ```
 
+The exact reset/apply/apply sequence is illustrated with fictional local output below:
+
+![Terminal output: the first apply performs two simulated writes and the second performs zero](assets/terminal-repeat-run.svg)
+
 Failure and uncertainty scenarios:
 
 ```powershell
@@ -92,13 +96,13 @@ Dry runs print a report to the terminal and do not create files. Apply runs writ
 
 Those JSON files are ignored by Git. The reset command enumerates exact known filenames, verifies they are direct children of `generated/`, and never recursively deletes a directory.
 
-A reproducible dry-run illustration is in [`examples/portfolio-dry-run.txt`](examples/portfolio-dry-run.txt).
+A reproducible dry-run illustration is in [`examples/portfolio-dry-run.txt`](examples/portfolio-dry-run.txt). The terminal image above is reproduced by running `reset` followed by the two identical apply commands shown in Quick start.
 
 ## Safety and limitations
 
 All destination-provider behavior is simulated in local Python code. This demo does **not** verify a live Meetup, Eventbrite, Google Calendar, or SDK integration. It makes no external network calls and does not implement provider authentication, API retries, webhooks, scheduling, or deployment.
 
-The fixtures use `America/Denver`. Python's system IANA timezone database is used when available; a dependency-free fallback validates `America/Denver` and `UTC`, including U.S. daylight-saving transitions, on Windows installations without that database. Other named zones fail closed unless the host provides IANA timezone data.
+The fixtures use `America/Denver`. Python's system IANA timezone database is used when available. A dependency-free fallback validates `America/Denver` only for 2007-2037, using the modern U.S. daylight-saving rules, and validates `UTC`; Denver dates outside that range fail closed unless the host provides IANA timezone data. Other named zones also fail closed without system IANA data.
 
 Canceled records are never automatically deleted. Missing descriptions and other required fields become review items instead of clearing destination values. Provider failures are reported without a write. Uncertain writes stop future automatic creates until a person resolves the marker.
 
@@ -110,6 +114,7 @@ See [`docs/design-notes.md`](docs/design-notes.md) for source-of-truth, identity
 - [`docs/upwork-portfolio-copy.md`](docs/upwork-portfolio-copy.md)
 - [`docs/publication-review.md`](docs/publication-review.md)
 - [`assets/workflow.svg`](assets/workflow.svg)
+- [`assets/terminal-repeat-run.svg`](assets/terminal-repeat-run.svg)
 
 ## Attribution and license decision
 

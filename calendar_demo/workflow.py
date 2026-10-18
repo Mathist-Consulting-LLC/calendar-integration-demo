@@ -19,7 +19,7 @@ def execute(
     provider = SimulatedProvider(state)
     results: list[dict[str, Any]] = []
 
-    for item in plan:
+    for raw, item in zip(source_events, plan):
         row = item.public_dict()
         row["outcome"] = "planned" if not apply else "not_applied"
         if not apply or item.action not in {"create", "update"}:
@@ -32,7 +32,17 @@ def execute(
             results.append(row)
             continue
         try:
-            provider.apply(item)
+            rechecked = build_plan([raw], state)[0]
+            if (
+                rechecked.action != item.action
+                or rechecked.source_id != item.source_id
+                or rechecked.provider_id != item.provider_id
+            ):
+                row["outcome"] = "review"
+                row["reason"] = "Pre-write safety recheck stopped the mutation: " + rechecked.reason
+                results.append(row)
+                continue
+            provider.apply(rechecked)
             row["outcome"] = "applied"
         except UncertainWriteOutcome as exc:
             row["outcome"] = "uncertain"
